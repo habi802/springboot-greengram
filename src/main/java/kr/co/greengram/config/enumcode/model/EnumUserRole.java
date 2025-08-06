@@ -1,5 +1,7 @@
 package kr.co.greengram.config.enumcode.model;
 
+import jakarta.persistence.Converter;
+import kr.co.greengram.config.enumcode.AbstractEnumCodeConverter;
 import kr.co.greengram.config.enumcode.EnumMapperType;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -15,4 +17,11 @@ public enum EnumUserRole implements EnumMapperType {
 
     private final String code;
     private final String value;
+
+    @Converter(autoApply = true)
+    public static class CodeConverter extends AbstractEnumCodeConverter<EnumUserRole> {
+        public CodeConverter() {
+            super(EnumUserRole.class, false);
+        }
+    }
 }
