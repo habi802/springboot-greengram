@@ -1,12 +1,11 @@
 package kr.co.greengram.config.exception;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 import org.springframework.validation.FieldError;
 
 @Getter
+@Builder
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @ToString
 public class ValidationError {
@@ -14,6 +13,9 @@ public class ValidationError {
     private String message;
 
     public static ValidationError of(final FieldError fieldError) {
-        return new ValidationError(fieldError.getField(), fieldError.getDefaultMessage());
+        return ValidationError.builder()
+                .field(fieldError.getField())
+                .message(fieldError.getDefaultMessage())
+                .build();
     }
 }
