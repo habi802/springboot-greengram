@@ -9,25 +9,16 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Slf4j
 @Configuration
 public class WebMvcConfiguration implements WebMvcConfigurer {
-    private final String uploadPath;
+    private final String uploadDirectory;
 
-    public WebMvcConfiguration(@Value("${constants.file.upload-directory}") String uploadPath) {
-        this.uploadPath = uploadPath;
-        log.info("upload path: {}", uploadPath);
+    public WebMvcConfiguration(@Value("${constants.file.upload-directory}") String uploadDirectory) {
+        this.uploadDirectory = uploadDirectory;
+        log.info("upload path: {}", uploadDirectory);
     }
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/pic/**")
-                .addResourceLocations("file:" + uploadPath);
+                .addResourceLocations("file:" + uploadDirectory);
     }
-
-//    @Override
-//    public void addCorsMappings(CorsRegistry registry) {
-//        registry.addMapping("/**")
-//                //.allowedOrigins("*")
-//                .allowedOriginPatterns("*")
-//                .allowedMethods("*")
-//                .allowCredentials(true);
-//    }
 }
