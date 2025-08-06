@@ -11,7 +11,7 @@ import lombok.Setter;
 @EqualsAndHashCode
 public class UserFollow extends CreatedAt {
     @EmbeddedId
-    private ToUserIds toUserIds;
+    private UserFollowIds userFollowIds;
 
     @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
     @JoinColumn(name="to_user_id")
