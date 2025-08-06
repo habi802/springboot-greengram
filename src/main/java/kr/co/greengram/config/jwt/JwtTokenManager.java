@@ -2,10 +2,10 @@ package kr.co.greengram.config.jwt;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import kr.co.gallery_jwt_jpa.config.constants.ConstJwt;
-import kr.co.gallery_jwt_jpa.config.model.JwtUser;
-import kr.co.gallery_jwt_jpa.config.model.UserPrincipal;
-import kr.co.gallery_jwt_jpa.config.util.CookieUtils;
+import kr.co.greengram.config.constants.ConstJwt;
+import kr.co.greengram.config.model.JwtUser;
+import kr.co.greengram.config.model.UserPrincipal;
+import kr.co.greengram.config.util.CookieUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

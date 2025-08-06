@@ -11,7 +11,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebMvcConfiguration implements WebMvcConfigurer {
     private final String uploadPath;
 
-    public WebMvcConfiguration(@Value("${constants.file.directory}") String uploadPath) {
+    public WebMvcConfiguration(@Value("${constants.file.upload-directory}") String uploadPath) {
         this.uploadPath = uploadPath;
         log.info("upload path: {}", uploadPath);
     }
