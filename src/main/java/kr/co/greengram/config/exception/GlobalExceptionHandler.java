@@ -38,7 +38,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         }
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(new ResultResponse<>(errors.toString(), errors.toString()));
+                .body(new ResultResponse<>(sb.toString(), errors.toString()));
     }
 
     private List<ValidationError> getValidationError(BindException e) {
