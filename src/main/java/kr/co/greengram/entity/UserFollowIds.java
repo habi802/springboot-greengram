@@ -1,8 +1,6 @@
 package kr.co.greengram.entity;
 
 import jakarta.persistence.Embeddable;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -16,9 +14,6 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserFollowIds implements Serializable {
-    private long toUserId;
-
-    @ManyToOne
-    @JoinColumn(name = "from_user_id", nullable = false)
-    private User User;
+    private Long fromUserId;
+    private Long toUserId;
 }

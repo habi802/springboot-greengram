@@ -13,8 +13,13 @@ public class UserFollow extends CreatedAt {
     @EmbeddedId
     private UserFollowIds userFollowIds;
 
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
-    @JoinColumn(name="to_user_id")
+    @ManyToOne
+    @MapsId("fromUserId")
+    @JoinColumn(name = "from_user_id")
+    private User fromUser;
+
+    @ManyToOne
     @MapsId("toUserId")
-    private User user;
+    @JoinColumn(name = "to_user_id")
+    private User toUser;
 }
