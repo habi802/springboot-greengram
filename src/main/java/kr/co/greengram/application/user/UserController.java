@@ -1,8 +1,11 @@
 package kr.co.greengram.application.user;
 
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import kr.co.greengram.application.user.model.UserSignInDto;
 import kr.co.greengram.application.user.model.UserSignUpReq;
 import kr.co.greengram.application.user.model.UserSignInReq;
+import kr.co.greengram.config.jwt.JwtTokenManager;
 import kr.co.greengram.config.model.ResultResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
+    private final JwtTokenManager jwtTokenManager;
 
     @PostMapping("/sign-up")
     public ResultResponse<?> signUp(@Valid @RequestPart UserSignUpReq req,
@@ -26,8 +30,11 @@ public class UserController {
     }
 
     @PostMapping("/sign-in")
-    public ResultResponse<?> signIn(@Valid @RequestBody UserSignInReq req) {
+    public ResultResponse<?> signIn(@Valid @RequestBody UserSignInReq req, HttpServletResponse response) {
         log.info("req: {}", req);
-        return null;
+        UserSignInDto userSignInDto = userService.signIn(req);
+        jwtTokenManager.issue(response, userSignInDto.getJwtUser());
+
+        return new ResultResponse<>("로그인 성공!", userSignInDto.getUserSignInRes());
     }
 }
