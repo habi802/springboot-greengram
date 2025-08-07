@@ -1,9 +1,11 @@
 package kr.co.greengram.application.user.model;
 
 import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import kr.co.greengram.config.enumcode.model.EnumUserRole;
 import lombok.Getter;
 import lombok.ToString;
+
+import java.util.List;
 
 @Getter
 @ToString
@@ -14,4 +16,6 @@ public class UserSignUpReq {
     private String upw;
     @Pattern(regexp = "^[가-힣]{2,10}$", message = "닉네임은 한글로만 2~10자까지 가능합니다.")
     private String nickName;
+
+    private List<EnumUserRole> roles;
 }

@@ -23,6 +23,7 @@ public class UserController {
                                     @RequestPart(required = false) MultipartFile pic) {
         log.info("req: {}", req);
         log.info("pic: {}", pic);
-        return new ResultResponse<Integer>("", 1);
+        userService.signUp(req, pic);
+        return new ResultResponse<Integer>("회원 가입 성공!", 1);
     }
 }

@@ -6,6 +6,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -13,7 +15,11 @@ import org.springframework.web.cors.CorsConfigurationSource;
 
 import java.util.Collections;
 
-@Configuration // Bean 등록, Bean 메소드가 있다.
+/*
+    Bean 등록, Bean 메소드가 있다.
+    Bean 메소드는 무조건 싱클톤으로 처리한다.
+ */
+@Configuration
 @RequiredArgsConstructor
 public class WebSecurityConfiguration {
     private final TokenAuthenticationFilter tokenAuthenticationFilter;
@@ -49,5 +55,10 @@ public class WebSecurityConfiguration {
             config.setAllowCredentials(true);
             return config;
         };
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }
