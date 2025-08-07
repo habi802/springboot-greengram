@@ -1,12 +1,11 @@
 package kr.co.greengram.entity;
 
 import jakarta.persistence.*;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
-@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @EqualsAndHashCode
 public class UserRole {
