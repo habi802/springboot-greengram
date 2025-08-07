@@ -1,14 +1,23 @@
 package kr.co.greengram.application.user;
 
+import kr.co.greengram.application.user.model.UserSignInDto;
+import kr.co.greengram.application.user.model.UserSignInReq;
+import kr.co.greengram.application.user.model.UserSignInRes;
 import kr.co.greengram.application.user.model.UserSignUpReq;
+import kr.co.greengram.config.enumcode.model.EnumUserRole;
+import kr.co.greengram.config.model.JwtUser;
 import kr.co.greengram.config.util.ImgUploadManager;
 import kr.co.greengram.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
 
 @Slf4j
 @Service
@@ -34,5 +43,27 @@ public class UserService {
             String savedFileName = imgUploadManager.saveProfilePic(user.getUserId(), pic);
             user.setPic(savedFileName);
         }
+    }
+
+    public UserSignInDto signIn(UserSignInReq req) {
+        User user = userRepository.findByUid(req.getUid());
+        if (user == null || !passwordEncoder.matches(req.getUpw(), user.getUpw())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "아이디/비밀번호를 확인해주세요.");
+        }
+
+        // user 튜플을 가져왔는데 user_role에 저장되어 있는 데이터까지 가져올 수 있었던 건 양방향 관계 설정을 했기 때문에 가능
+        List<EnumUserRole> roles = user.getUserRoles().stream().map(item -> item.getUserRoleIds().getRoleCode()).toList();
+        JwtUser jwtUser = new JwtUser(user.getUserId(), roles);
+
+        UserSignInRes res = UserSignInRes.builder()
+                .userId(user.getUserId())
+                .nickName(user.getNickName())
+                .pic(user.getPic())
+                .build();
+
+        return UserSignInDto.builder()
+                .jwtUser(jwtUser)
+                .userSignInRes(res)
+                .build();
     }
 }
