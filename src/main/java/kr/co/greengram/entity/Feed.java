@@ -1,12 +1,15 @@
 package kr.co.greengram.entity;
 
 import jakarta.persistence.*;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
-@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @EqualsAndHashCode
 public class Feed extends UpdatedAt {
@@ -22,5 +25,17 @@ public class Feed extends UpdatedAt {
 
     @ManyToOne
     @JoinColumn(name = "write_user_id", nullable = false)
-    private User user;
+    private User writerUser;
+
+    @OneToMany(mappedBy = "feed", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<FeedPic> feedPics = new ArrayList<>(1);
+
+    public void addFeedPics(List<String> picFileNames) {
+        for (String picFileName : picFileNames) {
+            FeedPicIds ids = new FeedPicIds(this.feedId, picFileName);
+            FeedPic feedPic = new FeedPic(ids, this);
+
+            this.feedPics.add(feedPic);
+        }
+    }
 }
