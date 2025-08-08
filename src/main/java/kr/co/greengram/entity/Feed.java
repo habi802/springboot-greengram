@@ -27,13 +27,20 @@ public class Feed extends UpdatedAt {
     @JoinColumn(name = "write_user_id", nullable = false)
     private User writerUser;
 
+    @Builder.Default // builder 패턴 이용 시 null이 되는데 이 애노테이션을 주면 데이터 등록됨
     @OneToMany(mappedBy = "feed", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<FeedPic> feedPics = new ArrayList<>(1);
 
     public void addFeedPics(List<String> picFileNames) {
         for (String picFileName : picFileNames) {
-            FeedPicIds ids = new FeedPicIds(this.feedId, picFileName);
-            FeedPic feedPic = new FeedPic(ids, this);
+            FeedPicIds ids = FeedPicIds.builder()
+                    .feedId(this.feedId)
+                    .pic(picFileName)
+                    .build();
+            FeedPic feedPic = FeedPic.builder()
+                    .feedPicIds(ids)
+                    .feed(this)
+                    .build();
 
             this.feedPics.add(feedPic);
         }

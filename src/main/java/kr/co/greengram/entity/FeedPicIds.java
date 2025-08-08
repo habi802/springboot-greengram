@@ -2,16 +2,14 @@ package kr.co.greengram.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.io.Serializable;
 
 @Getter
 @EqualsAndHashCode
 @Embeddable
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class FeedPicIds implements Serializable {
