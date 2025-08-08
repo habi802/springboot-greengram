@@ -12,11 +12,11 @@ import java.util.List;
 
 @Getter
 public class UserPrincipal implements UserDetails {
-    private final long memberId;
+    private final long signedUserId;
     private final Collection<? extends GrantedAuthority> authorities;
 
-    public UserPrincipal(long memberId, List<EnumUserRole> roles) {
-        this.memberId = memberId;
+    public UserPrincipal(long signedUserId, List<EnumUserRole> roles) {
+        this.signedUserId = signedUserId;
         //this.authorities = roles.stream().map(role -> new SimpleGrantedAuthority(String.format("ROLE.%s", role.name()))).toList();
         List<SimpleGrantedAuthority> list = new ArrayList<>();
         for (EnumUserRole role : roles) {

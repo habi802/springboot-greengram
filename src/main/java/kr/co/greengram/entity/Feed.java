@@ -17,7 +17,7 @@ public class Feed extends UpdatedAt {
     @Column(length = 30)
     private String location;
 
-    @Column(length = 1000)
+    @Column(length = 1_000)
     private String contents;
 
     @ManyToOne
