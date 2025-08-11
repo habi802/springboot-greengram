@@ -44,6 +44,10 @@ public class FeedService {
     }
 
     public List<FeedGetRes> getFeedList(FeedGetDto dto) {
-        return feedMapper.findAllLimitedTo(dto);
+        List<FeedGetRes> list = feedMapper.findAllLimitedTo(dto);
+        for (FeedGetRes feedGetRes : list) {
+            feedGetRes.setPics(feedMapper.findAllPicByFeedId(feedGetRes.getFeedId()));
+        }
+        return list;
     }
 }

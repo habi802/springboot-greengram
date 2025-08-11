@@ -1,10 +1,12 @@
 package kr.co.greengram.application.feed.model;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
 @Getter
+@Setter
 public class FeedGetRes {
     private long feedId;
     private String contents;
