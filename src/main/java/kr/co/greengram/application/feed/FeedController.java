@@ -29,4 +29,7 @@ public class FeedController {
         feedService.postFeed(userPrincipal.getSignedUserId(), req, pics);
         return new ResultResponse<>("피드 등록 성공!", null);
     }
+
+    // 페이징, 피드(사진, 댓글(3개만))
+    // 현재는 피드+사진만 (N+1)
 }
