@@ -1,6 +1,7 @@
 package kr.co.greengram.application.feed;
 
 import jakarta.validation.Valid;
+import kr.co.greengram.application.feed.model.FeedGetReq;
 import kr.co.greengram.application.feed.model.FeedPostReq;
 import kr.co.greengram.config.model.ResultResponse;
 import kr.co.greengram.config.model.UserPrincipal;
@@ -24,10 +25,16 @@ public class FeedController {
                                       @Valid @RequestPart FeedPostReq req,
                                       @RequestPart(name = "pic") List<MultipartFile> pics) {
         log.info("signedUserId: {}", userPrincipal.getSignedUserId());
-        log.info("req: {}", req);
+        log.info("post feed req: {}", req);
         log.info("pics.size: {}", pics.size());
         feedService.postFeed(userPrincipal.getSignedUserId(), req, pics);
         return new ResultResponse<>("피드 등록 성공!", null);
+    }
+
+    @GetMapping
+    public ResultResponse<?> getFeedList(@Valid @ModelAttribute FeedGetReq req) {
+        log.info("get feed req: {}", req);
+        return null;
     }
 
     // 페이징, 피드(사진, 댓글(3개만))
