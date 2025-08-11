@@ -1,5 +1,7 @@
 package kr.co.greengram.application.feed;
 
+import kr.co.greengram.application.feed.model.FeedGetDto;
+import kr.co.greengram.application.feed.model.FeedGetRes;
 import kr.co.greengram.application.feed.model.FeedPostReq;
 import kr.co.greengram.config.util.ImgUploadManager;
 import kr.co.greengram.entity.Feed;
@@ -17,6 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FeedService {
     private final FeedRepository feedRepository;
+    private final FeedMapper feedMapper;
     private final ImgUploadManager imgUploadManager;
 
     @Transactional
@@ -35,5 +38,9 @@ public class FeedService {
         List<String> fileNames = imgUploadManager.saveFeedPics(feed.getFeedId(), pics);
 
         feed.addFeedPics(fileNames);
+    }
+
+    public List<FeedGetRes> getFeedList(FeedGetDto dto) {
+        return feedMapper.findAllLimitedTo(dto);
     }
 }

@@ -3,7 +3,7 @@
 <mapper namespace="kr.co.greengram.application.feed.FeedMapper">
     <select id="findAllLimitedTo">
         SELECT f.feed_id, f.contents, f.location, f.created_at,
-               f.writer_user_id AS writer_user_id, u.uid AS writer_uid, u.nick_name AS writer_nick_name, u.pic AS writer_pic
+               f.write_user_id AS writer_user_id, u.uid AS writer_uid, u.nick_name AS writer_nick_name, u.pic AS writer_pic
         FROM feed f
         JOIN user u
         ON u.user_id = f.write_user_id

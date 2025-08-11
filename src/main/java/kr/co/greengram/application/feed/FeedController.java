@@ -3,6 +3,7 @@ package kr.co.greengram.application.feed;
 import jakarta.validation.Valid;
 import kr.co.greengram.application.feed.model.FeedGetDto;
 import kr.co.greengram.application.feed.model.FeedGetReq;
+import kr.co.greengram.application.feed.model.FeedGetRes;
 import kr.co.greengram.application.feed.model.FeedPostReq;
 import kr.co.greengram.config.model.ResultResponse;
 import kr.co.greengram.config.model.UserPrincipal;
@@ -42,7 +43,8 @@ public class FeedController {
                 .startIdx((req.getPage() - 1) * req.getRowPerPage())
                 .size(req.getRowPerPage())
                 .build();
-        return null;
+        List<FeedGetRes> result = feedService.getFeedList(dto);
+        return new ResultResponse<>("피드 조회 성공!", result);
     }
 
     // 페이징, 피드(사진, 댓글(3개만))
