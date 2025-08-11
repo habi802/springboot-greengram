@@ -3,6 +3,7 @@ package kr.co.greengram.application.feed;
 import kr.co.greengram.application.feed.model.FeedGetDto;
 import kr.co.greengram.application.feed.model.FeedGetRes;
 import kr.co.greengram.application.feed.model.FeedPostReq;
+import kr.co.greengram.application.feed.model.FeedPostRes;
 import kr.co.greengram.config.util.ImgUploadManager;
 import kr.co.greengram.entity.Feed;
 import kr.co.greengram.entity.User;
@@ -23,7 +24,7 @@ public class FeedService {
     private final ImgUploadManager imgUploadManager;
 
     @Transactional
-    public void postFeed(long signedUserId, FeedPostReq req, List<MultipartFile> pics) {
+    public FeedPostRes postFeed(long signedUserId, FeedPostReq req, List<MultipartFile> pics) {
         User writerUser = new User();
         writerUser.setUserId(signedUserId);
 
@@ -38,6 +39,8 @@ public class FeedService {
         List<String> fileNames = imgUploadManager.saveFeedPics(feed.getFeedId(), pics);
 
         feed.addFeedPics(fileNames);
+
+        return new FeedPostRes(feed.getFeedId(), fileNames);
     }
 
     public List<FeedGetRes> getFeedList(FeedGetDto dto) {

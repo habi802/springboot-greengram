@@ -1,10 +1,7 @@
 package kr.co.greengram.application.feed;
 
 import jakarta.validation.Valid;
-import kr.co.greengram.application.feed.model.FeedGetDto;
-import kr.co.greengram.application.feed.model.FeedGetReq;
-import kr.co.greengram.application.feed.model.FeedGetRes;
-import kr.co.greengram.application.feed.model.FeedPostReq;
+import kr.co.greengram.application.feed.model.*;
 import kr.co.greengram.config.model.ResultResponse;
 import kr.co.greengram.config.model.UserPrincipal;
 import lombok.RequiredArgsConstructor;
@@ -29,8 +26,8 @@ public class FeedController {
         log.info("signedUserId: {}", userPrincipal.getSignedUserId());
         log.info("post feed req: {}", req);
         log.info("pics.size: {}", pics.size());
-        feedService.postFeed(userPrincipal.getSignedUserId(), req, pics);
-        return new ResultResponse<>("피드 등록 성공!", null);
+        FeedPostRes result = feedService.postFeed(userPrincipal.getSignedUserId(), req, pics);
+        return new ResultResponse<>("피드 등록 성공!", result);
     }
 
     @GetMapping
