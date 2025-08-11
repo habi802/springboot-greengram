@@ -1,6 +1,7 @@
 package kr.co.greengram.application.feed;
 
 import jakarta.validation.Valid;
+import kr.co.greengram.application.feed.model.FeedGetDto;
 import kr.co.greengram.application.feed.model.FeedGetReq;
 import kr.co.greengram.application.feed.model.FeedPostReq;
 import kr.co.greengram.config.model.ResultResponse;
@@ -32,8 +33,15 @@ public class FeedController {
     }
 
     @GetMapping
-    public ResultResponse<?> getFeedList(@Valid @ModelAttribute FeedGetReq req) {
+    public ResultResponse<?> getFeedList(@AuthenticationPrincipal UserPrincipal userPrincipal,
+                                        @Valid @ModelAttribute FeedGetReq req) {
+        log.info("signedUserId: {}", userPrincipal.getSignedUserId());
         log.info("get feed req: {}", req);
+        FeedGetDto dto = FeedGetDto.builder()
+                .signedUserId(userPrincipal.getSignedUserId())
+                .startIdx((req.getPage() - 1) * req.getRowPerPage())
+                .size(req.getRowPerPage())
+                .build();
         return null;
     }
 
