@@ -6,9 +6,11 @@ import kr.co.greengram.config.model.ResultResponse;
 import kr.co.greengram.config.model.UserPrincipal;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -19,10 +21,16 @@ import java.util.List;
 public class FeedController {
     private final FeedService feedService;
 
+    private final int MAX_PIC_COUNT = 10;
+
     @PostMapping
     public ResultResponse<?> postFeed(@AuthenticationPrincipal UserPrincipal userPrincipal,
                                       @Valid @RequestPart FeedPostReq req,
                                       @RequestPart(name = "pic") List<MultipartFile> pics) {
+        if (pics.size() > MAX_PIC_COUNT) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format("사진은 %d장까지 등록이 가능합니다.", MAX_PIC_COUNT));
+        }
+
         log.info("signedUserId: {}", userPrincipal.getSignedUserId());
         log.info("post feed req: {}", req);
         log.info("pics.size: {}", pics.size());
