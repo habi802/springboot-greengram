@@ -3,10 +3,14 @@
 <mapper namespace="kr.co.greengram.application.feed.FeedMapper">
     <select id="findAllLimitedTo">
         SELECT f.feed_id, f.contents, f.location, f.created_at,
-               f.write_user_id AS writer_user_id, u.uid AS writer_uid, u.nick_name AS writer_nick_name, u.pic AS writer_pic
+               f.write_user_id AS writer_user_id, u.uid AS writer_uid, u.nick_name AS writer_nick_name, u.pic AS writer_pic,
+               fl.feed_id IS NOT NULL AS isLike
         FROM feed f
         JOIN user u
         ON u.user_id = f.write_user_id
+        LEFT JOIN feed_like fl
+        ON fl.feed_id = f.feed_id
+        AND fl.user_id = #{signedUserId}
         ORDER BY f.feed_id DESC
         LIMIT #{startIdx}, #{size}
     </select>
