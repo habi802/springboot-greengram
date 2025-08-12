@@ -4,6 +4,10 @@ import kr.co.greengram.application.feed.model.FeedGetDto;
 import kr.co.greengram.application.feed.model.FeedGetRes;
 import kr.co.greengram.application.feed.model.FeedPostReq;
 import kr.co.greengram.application.feed.model.FeedPostRes;
+import kr.co.greengram.application.feedcomment.FeedCommentMapper;
+import kr.co.greengram.application.feedcomment.model.FeedCommentGetReq;
+import kr.co.greengram.application.feedcomment.model.FeedCommentGetRes;
+import kr.co.greengram.application.feedcomment.model.FeedCommentItem;
 import kr.co.greengram.config.util.ImgUploadManager;
 import kr.co.greengram.entity.Feed;
 import kr.co.greengram.entity.User;
@@ -22,6 +26,7 @@ public class FeedService {
     private final FeedRepository feedRepository;
     private final FeedMapper feedMapper;
     private final ImgUploadManager imgUploadManager;
+    private final FeedCommentMapper feedCommentMapper;
 
     @Transactional
     public FeedPostRes postFeed(long signedUserId, FeedPostReq req, List<MultipartFile> pics) {
@@ -45,8 +50,23 @@ public class FeedService {
 
     public List<FeedGetRes> getFeedList(FeedGetDto dto) {
         List<FeedGetRes> list = feedMapper.findAllLimitedTo(dto);
+
+        // 각 피드에서 사진 가져오기, 댓글 가져오기(4개만)
+        final int START_IDX = 0;
+        final int SIZE = 4;
+        final int MORE_COMMENT_COUNT = 4;
         for (FeedGetRes feedGetRes : list) {
             feedGetRes.setPics(feedMapper.findAllPicByFeedId(feedGetRes.getFeedId()));
+
+            FeedCommentGetReq feedCommentGetReq = new FeedCommentGetReq(feedGetRes.getFeedId(), START_IDX, SIZE);
+            List<FeedCommentItem> commentList = feedCommentMapper.findAllByFeedIdLimitedTo(feedCommentGetReq);
+
+            boolean moreComment = commentList.size() == MORE_COMMENT_COUNT;
+            FeedCommentGetRes feedCommentGetRes = new FeedCommentGetRes(moreComment, commentList);
+            if (moreComment) {
+                commentList.remove(MORE_COMMENT_COUNT - 1);
+            }
+            feedGetRes.setComments(feedCommentGetRes);
         }
         return list;
     }
