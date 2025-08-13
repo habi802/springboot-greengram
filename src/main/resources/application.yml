@@ -3,6 +3,9 @@ constants:
     upload-directory: D:\SQL(04-14~)\backend\springboot\upload\greengram
     profile-pic: /profile
     feed-pic: /feed
+  comment:
+    start-index: 0
+    need-for-view-count: 3
   jwt:
     issuer: green502@green.com # 토큰 발행자
     bearer-format: JWT
