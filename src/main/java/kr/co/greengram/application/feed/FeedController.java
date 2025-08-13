@@ -1,5 +1,6 @@
 package kr.co.greengram.application.feed;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import kr.co.greengram.application.feed.model.*;
 import kr.co.greengram.config.model.ResultResponse;
@@ -26,7 +27,8 @@ public class FeedController {
     @PostMapping
     public ResultResponse<?> postFeed(@AuthenticationPrincipal UserPrincipal userPrincipal,
                                       @Valid @RequestPart FeedPostReq req,
-                                      @RequestPart(name = "pic") List<MultipartFile> pics) {
+                                      @RequestPart(name = "pic") List<MultipartFile> pics,
+                                      HttpServletRequest request) {
         if (pics.size() > MAX_PIC_COUNT) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format("사진은 %d장까지 등록이 가능합니다.", MAX_PIC_COUNT));
         }
@@ -34,6 +36,23 @@ public class FeedController {
         log.info("signedUserId: {}", userPrincipal.getSignedUserId());
         log.info("post feed req: {}", req);
         log.info("pics.size: {}", pics.size());
+
+        String ip = request.getHeader("X-Forwarded-For");
+        if (ip == null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("Proxy-Client-IP");
+        }
+        if (ip == null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("WL-Proxy-Client-IP");
+        }
+        if (ip == null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getRemoteAddr();
+        }
+        // X-Forwarded-For에 여러 개의 IP가 있을 수 있으니, 첫 번째 IP만 사용
+        if (ip != null && ip.contains(",")) {
+            ip = ip.split(",")[0].trim();
+        }
+        req.setIp(ip);
+
         FeedPostRes result = feedService.postFeed(userPrincipal.getSignedUserId(), req, pics);
         return new ResultResponse<>("피드 등록 성공!", result);
     }

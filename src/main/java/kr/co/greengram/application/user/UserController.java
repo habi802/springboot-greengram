@@ -23,9 +23,27 @@ public class UserController {
 
     @PostMapping("/sign-up")
     public ResultResponse<?> signUp(@Valid @RequestPart UserSignUpReq req,
-                                    @RequestPart(required = false) MultipartFile pic) {
+                                    @RequestPart(required = false) MultipartFile pic,
+                                    HttpServletRequest request) {
         log.info("req: {}", req);
         log.info("pic: {}", pic);
+
+        String ip = request.getHeader("X-Forwarded-For");
+        if (ip == null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("Proxy-Client-IP");
+        }
+        if (ip == null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("WL-Proxy-Client-IP");
+        }
+        if (ip == null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getRemoteAddr();
+        }
+        // X-Forwarded-For에 여러 개의 IP가 있을 수 있으니, 첫 번째 IP만 사용
+        if (ip != null && ip.contains(",")) {
+            ip = ip.split(",")[0].trim();
+        }
+        req.setIp(ip);
+
         userService.signUp(req, pic);
         return new ResultResponse<Integer>("회원 가입 성공!", 1);
     }

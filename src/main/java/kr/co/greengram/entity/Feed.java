@@ -27,6 +27,9 @@ public class Feed extends UpdatedAt {
     @JoinColumn(name = "write_user_id", nullable = false)
     private User writerUser;
 
+    @Column(length = 255)
+    private String createdIp;
+
     @Builder.Default // builder 패턴 이용 시 null이 되는데 이 애노테이션을 주면 주소값 생성됨
     @OneToMany(mappedBy = "feed", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<FeedPic> feedPics = new ArrayList<>(1);

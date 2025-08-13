@@ -30,6 +30,9 @@ public class User extends UpdatedAt {
     @Column(nullable = false, length = 100)
     private String upw;
 
+    @Column(length = 255)
+    private String createdIp;
+
     // cascade는 자식과 나랑 모든 연결(내가 영속성되면 자식도 영속성되고, 내가 삭제되면 자식도 삭제된다 등등..)
     // orphanRemoval은 userRoles 에서 자식을 하나 제거하면 DB에서 뺀 자식은 삭제 처리된다.
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)

@@ -14,4 +14,6 @@ public class FeedPostReq {
 
     @Size(max = 30, message = "location은 30자 이하여야 합니다.")
     private String location;
+
+    private String ip;
 }

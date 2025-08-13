@@ -4,11 +4,13 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import kr.co.greengram.config.enumcode.model.EnumUserRole;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 import java.util.List;
 
 @Getter
+@Setter
 @ToString
 public class UserSignUpReq {
     @NotNull(message = "아이디는 필수로 입력하셔야 합니다.")
@@ -21,6 +23,8 @@ public class UserSignUpReq {
 
     @Pattern(regexp = "^[가-힣]{2,10}$", message = "닉네임은 한글로만 2~10자까지 가능합니다.")
     private String nickName;
+
+    private String ip;
 
     private List<EnumUserRole> roles;
 }

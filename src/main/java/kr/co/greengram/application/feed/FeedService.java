@@ -39,6 +39,7 @@ public class FeedService {
                 .writerUser(writerUser)
                 .location(req.getLocation())
                 .contents(req.getContents())
+                .createdIp(req.getIp())
                 .build();
 
         feedRepository.save(feed); // feed 객체는 영속성을 갖는다.

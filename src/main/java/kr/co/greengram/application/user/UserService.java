@@ -36,6 +36,7 @@ public class UserService {
         user.setUid(req.getUid());
         user.setUpw(hashedPassword);
         user.addUserRoles(req.getRoles());
+        user.setCreatedIp(req.getIp());
 
         userRepository.save(user);
 

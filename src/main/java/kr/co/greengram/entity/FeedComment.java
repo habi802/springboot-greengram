@@ -24,4 +24,7 @@ public class FeedComment extends UpdatedAt{
 
     @Column(nullable = false, length = 150)
     private String comment;
+
+    @Column(length = 255)
+    private String createdIp;
 }
