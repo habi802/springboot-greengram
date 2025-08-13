@@ -1,9 +1,6 @@
 package kr.co.greengram.application.user;
 
-import kr.co.greengram.application.user.model.UserSignInDto;
-import kr.co.greengram.application.user.model.UserSignInReq;
-import kr.co.greengram.application.user.model.UserSignInRes;
-import kr.co.greengram.application.user.model.UserSignUpReq;
+import kr.co.greengram.application.user.model.*;
 import kr.co.greengram.config.enumcode.model.EnumUserRole;
 import kr.co.greengram.config.model.JwtUser;
 import kr.co.greengram.config.util.ImgUploadManager;
@@ -66,5 +63,9 @@ public class UserService {
                 .jwtUser(jwtUser)
                 .userSignInRes(res)
                 .build();
+    }
+
+    public UserProfileGetRes getProfileUser(UserProfileGetDto dto) {
+        return null;
     }
 }

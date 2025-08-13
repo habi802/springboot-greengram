@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.greengram.application.user.UserMapper">
+    <select id="findProfileByUserId">
+        SELECT u.user_id, u.pic, u.created_at, u.uid, u.nick_name,
+               COUNT(f.feed_id) AS feed_count,
+               SUM(f.all_feed_like_count) AS all_feed_like_count
+        FROM user u
+        JOIN (
+            SELECT f.feed_id, f.write_user_id, COUNT(fl.feed_id) AS all_feed_like_count
+            FROM feed f
+            LEFT JOIN feed_like fl
+            ON fl.feed_id = f.feed_id
+            GROUP BY f.feed_id
+        ) f
+        ON f.write_user_id = u.user_id
+        WHERE u.user_id = #{profileUserId}
+        GROUP BY u.user_id
+    </select>
+</mapper>
