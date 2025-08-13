@@ -54,18 +54,16 @@ public class FeedService {
         List<FeedGetRes> list = feedMapper.findAllLimitedTo(dto);
 
         // 각 피드에서 사진 가져오기, 댓글 가져오기(4개만)
-        final int START_IDX = constComment.startIndex;
-        final int NEED_FOR_VIEW_SIZE = constComment.needForViewCount;
         for (FeedGetRes feedGetRes : list) {
             feedGetRes.setPics(feedMapper.findAllPicByFeedId(feedGetRes.getFeedId()));
 
-            FeedCommentGetReq feedCommentGetReq = new FeedCommentGetReq(feedGetRes.getFeedId(), START_IDX, NEED_FOR_VIEW_SIZE + 1);
+            FeedCommentGetReq feedCommentGetReq = new FeedCommentGetReq(feedGetRes.getFeedId(), constComment.startIndex, constComment.needForViewCount + 1);
             List<FeedCommentItem> commentList = feedCommentMapper.findAllByFeedIdLimitedTo(feedCommentGetReq);
 
-            boolean moreComment = commentList.size() > NEED_FOR_VIEW_SIZE;
+            boolean moreComment = commentList.size() > constComment.needForViewCount;
             FeedCommentGetRes feedCommentGetRes = new FeedCommentGetRes(moreComment, commentList);
             if (moreComment) {
-                commentList.remove(NEED_FOR_VIEW_SIZE);
+                commentList.remove(commentList.size() - 1);
             }
             feedGetRes.setComments(feedCommentGetRes);
         }
