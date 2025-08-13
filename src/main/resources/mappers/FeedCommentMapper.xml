@@ -8,6 +8,6 @@
         JOIN user u
         ON u.user_id = fc.user_id
         WHERE fc.feed_id = #{feedId}
-        LIMIT #{startIdx}, #{size}
+        LIMIT #{startIdx}, #{sizePlusOne}
     </select>
 </mapper>

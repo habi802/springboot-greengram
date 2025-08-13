@@ -57,7 +57,7 @@ public class FeedService {
         for (FeedGetRes feedGetRes : list) {
             feedGetRes.setPics(feedMapper.findAllPicByFeedId(feedGetRes.getFeedId()));
 
-            FeedCommentGetReq feedCommentGetReq = new FeedCommentGetReq(feedGetRes.getFeedId(), constComment.startIndex, constComment.needForViewCount + 1);
+            FeedCommentGetReq feedCommentGetReq = new FeedCommentGetReq(feedGetRes.getFeedId(), constComment.startIndex, constComment.needForViewCount);
             List<FeedCommentItem> commentList = feedCommentMapper.findAllByFeedIdLimitedTo(feedCommentGetReq);
 
             boolean moreComment = commentList.size() > constComment.needForViewCount;

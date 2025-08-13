@@ -2,6 +2,7 @@ package kr.co.greengram.application.feedcomment;
 
 import jakarta.validation.Valid;
 import kr.co.greengram.application.feedcomment.model.FeedCommentGetReq;
+import kr.co.greengram.application.feedcomment.model.FeedCommentGetRes;
 import kr.co.greengram.application.feedcomment.model.FeedCommentPostReq;
 import kr.co.greengram.config.model.ResultResponse;
 import kr.co.greengram.config.model.UserPrincipal;
@@ -29,6 +30,7 @@ public class FeedCommentController {
     @GetMapping
     public ResultResponse<?> getFeedCommentList(@Valid @ModelAttribute FeedCommentGetReq req) {
         log.info("get feed comment req: {}", req);
-        return null;
+        FeedCommentGetRes feedCommentGetRes = feedCommentService.getFeedList(req);
+        return new ResultResponse<>(String.format("rows: %d", feedCommentGetRes.getCommentList().size()), feedCommentGetRes);
     }
 }
