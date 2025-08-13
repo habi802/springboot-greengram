@@ -4,10 +4,10 @@
     <select id="findProfileByUserId">
         SELECT u.user_id, u.pic, u.created_at, u.uid, u.nick_name,
                COUNT(f.feed_id) AS feed_count,
-               SUM(f.all_feed_like_count) AS all_feed_like_count
+               SUM(f.feed_like_count) AS all_feed_like_count
         FROM user u
         JOIN (
-            SELECT f.feed_id, f.write_user_id, COUNT(fl.feed_id) AS all_feed_like_count
+            SELECT f.feed_id, f.write_user_id, COUNT(fl.feed_id) AS feed_like_count
             FROM feed f
             LEFT JOIN feed_like fl
             ON fl.feed_id = f.feed_id
