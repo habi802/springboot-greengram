@@ -30,4 +30,9 @@ public class FollowService {
 
         followRepository.save(userFollow);
     }
+
+    public void deleteUserFollow(Long fromUserId, Long toUserId) {
+        UserFollowIds userFollowIds = new UserFollowIds(fromUserId, toUserId);
+        followRepository.deleteById(userFollowIds);
+    }
 }

@@ -1,6 +1,7 @@
 package kr.co.greengram.application.follow;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
 import kr.co.greengram.application.follow.model.FollowPostReq;
 import kr.co.greengram.config.model.ResultResponse;
 import kr.co.greengram.config.model.UserPrincipal;
@@ -23,5 +24,14 @@ public class FollowController {
         log.info("follow toUserId: {}", req.getToUserId());
         followService.postUserFollow(userPrincipal.getSignedUserId(), req.getToUserId());
         return new ResultResponse<>("팔로우 성공!", null);
+    }
+
+    @DeleteMapping
+    public ResultResponse<?> deleteUserFollow(@AuthenticationPrincipal UserPrincipal userPrincipal,
+                                              @Valid @RequestParam("to_user_id") @Positive Long toUserId) {
+        log.info("delete fromUserId: {}", userPrincipal.getSignedUserId());
+        log.info("delete toUserId: {}", toUserId);
+        followService.deleteUserFollow(userPrincipal.getSignedUserId(), toUserId);
+        return new ResultResponse<>("팔로우 취소", null);
     }
 }
