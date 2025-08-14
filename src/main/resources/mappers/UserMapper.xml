@@ -10,13 +10,13 @@
                MAX(IF(uf_er.from_user_id = #{signedUserId}, 1, 0)) +
                MAX(IF(uf_ing.to_user_id = #{signedUserId}, 2, 0)) AS follow_state
         FROM user u
-        JOIN feed f
+        LEFT JOIN feed f
         ON f.write_user_id = u.user_id
         LEFT JOIN feed_like fl
         ON fl.feed_id = f.feed_id
-        JOIN user_follow uf_er
+        LEFT JOIN user_follow uf_er
         ON uf_er.to_user_id = u.user_id
-        JOIN user_follow uf_ing
+        LEFT JOIN user_follow uf_ing
         ON uf_ing.from_user_id = u.user_id
         WHERE u.user_id = #{profileUserId};
     </select>
