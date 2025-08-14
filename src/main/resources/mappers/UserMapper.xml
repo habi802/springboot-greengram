@@ -4,12 +4,18 @@
     <select id="findProfileByUserId">
         SELECT u.user_id, u.pic, u.created_at, u.uid, u.nick_name,
                COUNT(DISTINCT f.feed_id) AS feed_count,
-               COUNT(fl.feed_id) AS all_feed_like_count
+               COUNT(DISTINCT fl.feed_id, fl.user_id) AS all_feed_like_count,
+               COUNT(DISTINCT uf_er.from_user_id) AS follower_count,
+               COUNT(DISTINCT uf_ing.to_user_id) AS following_count
         FROM user u
         JOIN feed f
         ON f.write_user_id = u.user_id
         LEFT JOIN feed_like fl
         ON fl.feed_id = f.feed_id
+        JOIN user_follow uf_er
+        ON uf_er.to_user_id = u.user_id
+        JOIN user_follow uf_ing
+        ON uf_ing.from_user_id = u.user_id
         WHERE u.user_id = #{profileUserId};
     </select>
 </mapper>
