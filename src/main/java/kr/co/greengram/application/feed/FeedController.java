@@ -64,6 +64,7 @@ public class FeedController {
         log.info("get feed req: {}", req);
         FeedGetDto dto = FeedGetDto.builder()
                 .signedUserId(userPrincipal.getSignedUserId())
+                .profileUserId(req.getProfileUserId())
                 .startIdx((req.getPage() - 1) * req.getRowPerPage())
                 .size(req.getRowPerPage())
                 .build();

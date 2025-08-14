@@ -20,6 +20,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class UserService {
+    private final UserMapper userMapper;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final ImgUploadManager imgUploadManager;
@@ -66,6 +67,6 @@ public class UserService {
     }
 
     public UserProfileGetRes getProfileUser(UserProfileGetDto dto) {
-        return null;
+        return userMapper.findProfileByUserId(dto);
     }
 }

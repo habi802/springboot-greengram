@@ -6,7 +6,9 @@
                COUNT(DISTINCT f.feed_id) AS feed_count,
                COUNT(DISTINCT fl.feed_id, fl.user_id) AS all_feed_like_count,
                COUNT(DISTINCT uf_er.from_user_id) AS follower_count,
-               COUNT(DISTINCT uf_ing.to_user_id) AS following_count
+               COUNT(DISTINCT uf_ing.to_user_id) AS following_count,
+               MAX(IF(uf_er.from_user_id = #{signedUserId}, 1, 0)) +
+               MAX(IF(uf_ing.to_user_id = #{signedUserId}, 2, 0)) AS follow_state
         FROM user u
         JOIN feed f
         ON f.write_user_id = u.user_id

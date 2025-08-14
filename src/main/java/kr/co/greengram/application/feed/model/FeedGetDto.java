@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class FeedGetDto {
     private long signedUserId;
+    private Long profileUserId;
     private int startIdx;
     private int size;
 }
