@@ -5,18 +5,22 @@ import kr.co.greengram.application.feed.model.FeedGetRes;
 import kr.co.greengram.application.feed.model.FeedPostReq;
 import kr.co.greengram.application.feed.model.FeedPostRes;
 import kr.co.greengram.application.feedcomment.FeedCommentMapper;
+import kr.co.greengram.application.feedcomment.FeedCommentRepository;
 import kr.co.greengram.application.feedcomment.model.FeedCommentGetReq;
 import kr.co.greengram.application.feedcomment.model.FeedCommentGetRes;
 import kr.co.greengram.application.feedcomment.model.FeedCommentItem;
+import kr.co.greengram.application.feedlike.FeedLikeRepository;
+import kr.co.greengram.application.feedpic.FeedPicRepository;
 import kr.co.greengram.config.constants.ConstComment;
 import kr.co.greengram.config.util.ImgUploadManager;
-import kr.co.greengram.entity.Feed;
-import kr.co.greengram.entity.User;
+import kr.co.greengram.entity.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -26,6 +30,9 @@ import java.util.List;
 public class FeedService {
     private final FeedRepository feedRepository;
     private final FeedMapper feedMapper;
+    private final FeedLikeRepository feedLikeRepository;
+    private final FeedCommentRepository feedCommentRepository;
+    private final FeedPicRepository feedPicRepository;
     private final ImgUploadManager imgUploadManager;
     private final FeedCommentMapper feedCommentMapper;
     private final ConstComment constComment;
@@ -69,5 +76,27 @@ public class FeedService {
             feedGetRes.setComments(feedCommentGetRes);
         }
         return list;
+    }
+
+    @Transactional
+    public void deleteFeed(long signedUserId, long feedId) {
+        Feed feed = feedRepository.findById(feedId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "존재하지 않는 피드입니다."));
+
+        if (feed.getWriterUser().getUserId() != signedUserId) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "피드 삭제 권한이 없습니다.");
+        }
+
+        // 해당 피드 좋아요 삭제
+        feedLikeRepository.deleteAllByFeed(feed);
+
+        // 해당 피드 댓글 삭제
+        feedCommentRepository.deleteAllByFeed(feed);
+
+        // 해당 피드 사진 폴더 삭제
+        imgUploadManager.removeFeedDirectory(feedId);
+        feedPicRepository.deleteAllByFeed(feed);
+
+        feedRepository.delete(feed);
     }
 }

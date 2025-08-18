@@ -44,9 +44,19 @@ public class ImgUploadManager {
         return String.format("%s/%s/%d", constFile.getUploadDirectory(), constFile.getProfilePic(), userId);
     }
 
+    private String makeFeedDirectoryPath(long feedId) {
+        return String.format("%s/%s/%d", constFile.getUploadDirectory(), constFile.getFeedPic(), feedId);
+    }
+
     // 프로파일 폴더 삭제
     public void removeProfileDirectory(long userId) {
         String directory = makeProfileDirectoryPath(userId);
+        myFileUtils.deleteFolder(directory, true);
+    }
+
+    // 피드 폴더 삭제
+    public void removeFeedDirectory(long feedId) {
+        String directory = makeFeedDirectoryPath(feedId);
         myFileUtils.deleteFolder(directory, true);
     }
 

@@ -74,4 +74,13 @@ public class FeedController {
 
     // 페이징, 피드(사진, 댓글(3개만))
     // 현재는 피드+사진만 (N+1)
+
+    @DeleteMapping
+    public ResultResponse<?> deleteFeed(@AuthenticationPrincipal UserPrincipal userPrincipal,
+                                        @RequestParam(name = "feed_id") long feedId) {
+        log.info("signedUserId: {}", userPrincipal.getSignedUserId());
+        log.info("feedId: {}", feedId);
+        feedService.deleteFeed(userPrincipal.getSignedUserId(), feedId);
+        return new ResultResponse<>("피드 삭제 완료", null);
+    }
 }
