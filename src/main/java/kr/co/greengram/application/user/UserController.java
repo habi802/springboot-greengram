@@ -86,4 +86,11 @@ public class UserController {
         String savedFileName = userService.patchProfilePic(userPrincipal.getSignedUserId(), pic);
         return new ResultResponse<>("프로파일 사진 수정 완료!", savedFileName);
     }
+
+    @DeleteMapping("/profile/pic")
+    public ResultResponse<?> deleteProfilePic(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+        log.info("signedUserId: {}", userPrincipal.getSignedUserId());
+        userService.deleteProfilePic(userPrincipal.getSignedUserId());
+        return new ResultResponse<>("프로파일 사진 삭제 완료", null);
+    }
 }
