@@ -4,7 +4,14 @@
     <select id="findAllLimitedTo">
         SELECT f.feed_id, f.contents, f.location, f.created_at,
                f.write_user_id AS writer_user_id, u.uid AS writer_uid, u.nick_name AS writer_nick_name, u.pic AS writer_pic,
-               fl.feed_id IS NOT NULL AS isLike
+               (SELECT COUNT(fl_sub.feed_id)
+                FROM feed f_sub
+                LEFT JOIN feed_like fl_sub
+                ON fl_sub.feed_id = f_sub.feed_id
+                WHERE f_sub.feed_id = f.feed_id
+                GROUP BY f_sub.feed_id
+                ) AS like_count,
+               fl.feed_id IS NOT NULL AS is_like
         FROM feed f
         JOIN user u
         ON u.user_id = f.write_user_id
