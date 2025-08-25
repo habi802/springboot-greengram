@@ -2,6 +2,7 @@ package kr.co.greengram.entity;
 
 import jakarta.persistence.*;
 import kr.co.greengram.config.enumcode.model.EnumUserRole;
+import kr.co.greengram.config.security.SignInProviderType;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,10 +14,16 @@ import java.util.List;
 @Setter
 @Entity
 @EqualsAndHashCode
+@Table(
+    uniqueConstraints = @UniqueConstraint(columnNames = { "uid", "providerType" })
+)
 public class User extends UpdatedAt {
     @Id // primary key
     @GeneratedValue(strategy = GenerationType.IDENTITY) // AUTO_INCREMENT
     private long userId;
+
+    @Column(nullable = false, length = 2)
+    private SignInProviderType providerType;
 
     @Column(length = 30)
     private String nickName;
@@ -35,7 +42,7 @@ public class User extends UpdatedAt {
 
     // cascade는 자식과 나랑 모든 연결(내가 영속성되면 자식도 영속성되고, 내가 삭제되면 자식도 삭제된다 등등..)
     // orphanRemoval은 userRoles 에서 자식을 하나 제거하면 DB에서 뺀 자식은 삭제 처리된다.
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<UserRole> userRoles = new ArrayList<>(1);
 
     public void addUserRoles(List<EnumUserRole> enumUserRoles) {

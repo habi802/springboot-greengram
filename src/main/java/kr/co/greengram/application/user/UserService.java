@@ -3,6 +3,7 @@ package kr.co.greengram.application.user;
 import kr.co.greengram.application.user.model.*;
 import kr.co.greengram.config.enumcode.model.EnumUserRole;
 import kr.co.greengram.config.model.JwtUser;
+import kr.co.greengram.config.security.SignInProviderType;
 import kr.co.greengram.config.util.ImgUploadManager;
 import kr.co.greengram.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +31,7 @@ public class UserService {
         String hashedPassword = passwordEncoder.encode(req.getUpw());
 
         User user = new User();
+        user.setProviderType(SignInProviderType.LOCAL);
         user.setNickName(req.getNickName());
         user.setUid(req.getUid());
         user.setUpw(hashedPassword);

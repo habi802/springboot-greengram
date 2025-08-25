@@ -5,25 +5,36 @@ import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 @Getter
-public class UserPrincipal implements UserDetails {
-    private final long signedUserId;
+public class UserPrincipal implements UserDetails, OAuth2User {
+    private final JwtUser jwtUser;
     private final Collection<? extends GrantedAuthority> authorities;
 
-    public UserPrincipal(long signedUserId, List<EnumUserRole> roles) {
-        this.signedUserId = signedUserId;
+    public UserPrincipal(JwtUser jwtUser) {
+        this.jwtUser = jwtUser;
         //this.authorities = roles.stream().map(role -> new SimpleGrantedAuthority(String.format("ROLE.%s", role.name()))).toList();
         List<SimpleGrantedAuthority> list = new ArrayList<>();
-        for (EnumUserRole role : roles) {
+        for (EnumUserRole role : jwtUser.getRoles()) {
             String roleName = String.format("ROLE_%s", role.name());
             list.add(new SimpleGrantedAuthority(roleName));
         }
         this.authorities = list;
+    }
+
+    public Long getSignedUserId() {
+        return jwtUser.getSignedUserId();
+    }
+
+    @Override
+    public Map<String, Object> getAttributes() {
+        return Map.of();
     }
 
     @Override
@@ -38,6 +49,11 @@ public class UserPrincipal implements UserDetails {
 
     @Override
     public String getUsername() {
-        return null;
+        return String.valueOf(jwtUser.getSignedUserId());
+    }
+
+    @Override
+    public String getName() {
+        return "oauth2";
     }
 }
