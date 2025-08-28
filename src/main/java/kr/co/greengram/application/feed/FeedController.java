@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Set;
 
 @Slf4j
 @RestController
@@ -70,6 +71,15 @@ public class FeedController {
                 .build();
         List<FeedGetRes> result = feedService.getFeedList(dto);
         return new ResultResponse<>("피드 조회 성공!", result);
+    }
+
+    @GetMapping("/keyword")
+    public ResultResponse<?> getKeywordList(@Valid @ModelAttribute FeedKeywordGetReq req) {
+        log.info("req: {}", req);
+        Set<String> result = feedService.getKeywordList(req);
+        log.info("search result size: {}", result.size());
+        return new ResultResponse<>(String.format("rows: %d", result.size())
+                , result);
     }
 
     // 페이징, 피드(사진, 댓글(3개만))

@@ -1,9 +1,6 @@
 package kr.co.greengram.application.feed;
 
-import kr.co.greengram.application.feed.model.FeedGetDto;
-import kr.co.greengram.application.feed.model.FeedGetRes;
-import kr.co.greengram.application.feed.model.FeedPostReq;
-import kr.co.greengram.application.feed.model.FeedPostRes;
+import kr.co.greengram.application.feed.model.*;
 import kr.co.greengram.application.feedcomment.FeedCommentMapper;
 import kr.co.greengram.application.feedcomment.FeedCommentRepository;
 import kr.co.greengram.application.feedcomment.model.FeedCommentGetReq;
@@ -23,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Set;
 
 @Slf4j
 @Service
@@ -76,6 +74,10 @@ public class FeedService {
             feedGetRes.setComments(feedCommentGetRes);
         }
         return list;
+    }
+
+    public Set<String> getKeywordList(FeedKeywordGetReq req) {
+        return feedMapper.findAllByKeyword(req);
     }
 
     @Transactional
