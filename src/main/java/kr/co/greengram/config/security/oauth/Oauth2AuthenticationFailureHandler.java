@@ -34,7 +34,7 @@ public class Oauth2AuthenticationFailureHandler extends SimpleUrlAuthenticationF
                                                                            .queryParam("error", exception.getLocalizedMessage())
                                                                            .build()
                                                                            .toUriString();
-        //targetUrl = "http://localhost:8080/fe/redirect?error=에러메세지";
+        //targetUrl = "http://프론트_호스트_주소값/fe/redirect?error=에러메세지";
         getRedirectStrategy().sendRedirect(req, res, targetUrl);
 
     }

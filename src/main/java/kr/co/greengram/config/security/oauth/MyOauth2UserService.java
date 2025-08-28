@@ -41,6 +41,7 @@ public class MyOauth2UserService extends DefaultOAuth2UserService {
     }
 
     private OAuth2User process(OAuth2UserRequest req) {
+        // 소셜 로그인 완료 후 사용자 정보를 JSON 형태의 데이터로 담고 있는 객체
         OAuth2User oAuth2User = super.loadUser(req);
         /*
         req.getClientRegistration().getRegistrationId(); 소셜로그인 신청한 플랫폼 문자열값이 넘어온다.
@@ -86,6 +87,9 @@ public class MyOauth2UserService extends DefaultOAuth2UserService {
 
         UserPrincipal myUserDetails = new UserPrincipal(jwtUser);
         return myUserDetails;
+
+        // 이 객체는 OAuth2...SuccessHandler 의 onAuthenticationSuccess 메소드의
+        // auth 파라미터로 전달된다.
     }
 }
 
