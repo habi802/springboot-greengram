@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.co.greengram.application.feed.FeedMapper">
     <select id="findAllLimitedTo">
-        SELECT f.feed_id, f.contents, f.location, f.created_at, f.write_user_id
+        SELECT f.feed_id, f.contents, f.location, f.created_at, f.write_user_id AS writer_user_id
         , u.uid AS writerUid, u.nick_name AS writerNickName, u.pic AS writerPic
         , fl.feed_id IS NOT NULL AS isLike
         , IFNULL(flc.likeCount, 0) AS likeCount
@@ -20,7 +20,7 @@
         ON flc.feed_id = f.feed_id
         <where>
             <if test="profileUserId != null and profileUserId > 0">
-                f.writer_user_id = #{profileUserId}
+                f.write_user_id = #{profileUserId}
             </if>
             <if test="keyword != null">
                 AND (f.contents = #{keyword} OR f.location = #{keyword})
