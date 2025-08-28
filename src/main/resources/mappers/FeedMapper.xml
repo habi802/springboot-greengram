@@ -2,22 +2,22 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.co.greengram.application.feed.FeedMapper">
     <select id="findAllLimitedTo">
-        SELECT f.feed_id, f.contents, f.location, f.created_at,
-               f.write_user_id AS writer_user_id, u.uid AS writer_uid, u.nick_name AS writer_nick_name, u.pic AS writer_pic,
-               (SELECT COUNT(fl_sub.feed_id)
-                FROM feed f_sub
-                LEFT JOIN feed_like fl_sub
-                ON fl_sub.feed_id = f_sub.feed_id
-                WHERE f_sub.feed_id = f.feed_id
-                GROUP BY f_sub.feed_id
-                ) AS like_count,
-               fl.feed_id IS NOT NULL AS is_like
-        FROM feed f
-        JOIN user u
+        SELECT f.feed_id, f.contents, f.location, f.created_at, f.write_user_id
+        , u.uid AS writerUid, u.nick_name AS writerNickName, u.pic AS writerPic
+        , fl.feed_id IS NOT NULL AS isLike
+        , IFNULL(flc.likeCount, 0) AS likeCount
+        FROM feed AS f
+        INNER JOIN user AS u
         ON u.user_id = f.write_user_id
         LEFT JOIN feed_like fl
         ON fl.feed_id = f.feed_id
         AND fl.user_id = #{signedUserId}
+        LEFT JOIN (
+        SELECT feed_id, COUNT(feed_id) AS likeCount
+        FROM feed_like
+        GROUP BY feed_id
+        ) flc
+        ON flc.feed_id = f.feed_id
         <where>
             <if test="profileUserId != null and profileUserId > 0">
                 f.writer_user_id = #{profileUserId}

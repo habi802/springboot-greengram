@@ -68,8 +68,10 @@ public class FeedController {
                 .profileUserId(req.getProfileUserId())
                 .startIdx((req.getPage() - 1) * req.getRowPerPage())
                 .size(req.getRowPerPage())
+                .keyword(req.getKeyword())
                 .build();
         List<FeedGetRes> result = feedService.getFeedList(dto);
+        log.info("feedList: {}", result);
         return new ResultResponse<>("피드 조회 성공!", result);
     }
 
