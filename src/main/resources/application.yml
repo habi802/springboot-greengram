@@ -25,13 +25,24 @@ constants:
   oauth2:
     base-uri: /oauth2/authorization
     # FE에서 소셜 로그인 요청할 때 사용할 주소
-    # 플랫폼과 통신을 3번 정도 하 는데 각 통신들이 하나의 작업을 위한 트랜잭션
+    # 플랫폼과 통신을 3번 정도 하는데 각 통신들이 하나의 작업을 위한 트랜잭션
     # 연결시키기 위해 쿠키를 사용한다.
     authorization-request-cookie-name: oauth2_auth_request
     redirect-uri-param-cookie-name: redirect_uri
     cookie-expiry-seconds: 180
     authorized-redirect-uris:
       - http://localhost:5173/fe/redirect
+  pay:
+    kakao:
+      base-url: https://open-api.kakaopay.com/online/v1/payment
+      data:
+        approval-url: http://localhost:5173/pay/approval # 결제 승인 처리 화면
+        authorization-name: Authorization
+        cancel-url: http://localhost:5173/pay/cancel # 결제 취소 처리 화면
+        cid: TC0ONETIME #테스트용 가맹점 코드
+        fail-url: http://localhost:5173/pay/fail # 결제 실패 처리 화면
+        kakao-pay-info-session-name: kakao-pay-info
+        secret-key: DEV8D31888DBF2C81A829EFBB1734AE62BEE5BAB
 
 spring:
   application:
